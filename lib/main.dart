@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         statusBarColor: Color.fromARGB(255, 18, 38, 56),
         systemNavigationBarColor: Color.fromARGB(255, 18, 38, 56)));
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Demo for imy',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
