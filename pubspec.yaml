@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   webview_flutter: ^3.0.4
   connectivity_plus: ^2.3.6
-  data_connection_checker: ^0.3.4
+  internet_connection_checker: ^0.0.1+4
 
 dev_dependencies:
   flutter_test:
