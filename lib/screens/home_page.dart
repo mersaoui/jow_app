@@ -58,37 +58,21 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: [
-            WebView(
-              onProgress: (progress) {
-                setState(
-                  () {
-                    progressNumber = progress.toDouble();
-                    print('progress: $progressNumber');
-                  },
-                );
+        child: WebView(
+          onProgress: (progress) {
+            setState(
+              () {
+                progressNumber = progress.toDouble();
+                print('progress: $progressNumber');
               },
-              initialUrl: 'https://jow.plus/app-ios',
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (_webViewController) =>
-                  webViewController = _webViewController,
-              allowsInlineMediaPlayback: true,
-              initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
-            ),
-            /*isOffline
-                        ? Expanded(
-                            child: Center(
-                              child: Container(
-                                child: Text(
-                                  "Offline",
-                                  style: TextStyle(fontSize: 30.0),
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container()*/
-          ],
+            );
+          },
+          initialUrl: 'https://jow.plus/app-ios',
+          javascriptMode: JavascriptMode.unrestricted,
+          onWebViewCreated: (_webViewController) =>
+              webViewController = _webViewController,
+          allowsInlineMediaPlayback: true,
+          initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
         ),
       ),
     );
