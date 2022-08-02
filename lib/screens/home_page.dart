@@ -3,6 +3,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
@@ -28,32 +29,21 @@ class _HomePageState extends State<HomePage> {
     initConnectivity();
     _connectivitySubscription = Connectivity()
         .onConnectivityChanged
-        .listen((ConnectivityResult result) {
+        .listen((ConnectivityResult result) async {
       if (result == ConnectivityResult.none) {
-        //there is no any connection
-        setState(() {
-          isOffline = true;
-        });
-      } else if (result == ConnectivityResult.mobile) {
-        //connection is mobile data network
-        setState(() {
-          isOffline = false;
-        });
-      } else if (result == ConnectivityResult.wifi) {
-        //connection is from wifi
-        setState(() {
-          isOffline = false;
-        });
-      } else if (result == ConnectivityResult.ethernet) {
-        //connection is from wired connection
-        setState(() {
-          isOffline = false;
-        });
-      } else if (result == ConnectivityResult.bluetooth) {
-        //connection is from bluetooth threatening
-        setState(() {
-          isOffline = false;
-        });
+        if (result != ConnectivityResult.none) {
+          isOffline = await InternetConnectionChecker().hasConnection;
+
+          if (isOffline) {
+            setState(() {
+              isOffline = true;
+            });
+          } else {
+            setState(() {
+              isOffline = false;
+            });
+          }
+        }
       }
     });
   }
@@ -68,36 +58,49 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(color: Colors.blueGrey),
-          child: !isOffline
-              ? WebView(
-                  onPageFinished: (state) {
-                    print('onPageloaded state: $state');
-                    setState(() {
-                      isLoading = false;
-                    });
-                  },
-                  onPageStarted: (state) {
-                    print('onPageStarted state: $state');
-                    isLoading = true;
-                  },
-                  onProgress: (progress) {
-                    setState(
-                      () {
-                        progressNumber = progress.toDouble();
-                        print('progress: $progressNumber');
-                      },
-                    );
-                  },
-                  initialUrl: 'https://jow.plus/live-meta/jow-charki',
-                  javascriptMode: JavascriptMode.unrestricted,
-                  onWebViewCreated: (_webViewController) =>
-                      webViewController = _webViewController,
-                )
-              : Container(
-                  child: Text("Offline"),
-                ),
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(color: Colors.blueGrey),
+              child: Stack(
+                children: [
+                  WebView(
+                    onPageFinished: (state) {
+                      webViewController
+                          .runJavascript("window.backgroundMusic.play()");
+                    },
+                    onProgress: (progress) {
+                      setState(
+                        () {
+                          progressNumber = progress.toDouble();
+                          print('progress: $progressNumber');
+                        },
+                      );
+                    },
+                    initialUrl: 'https://jow.plus/app-ios',
+                    javascriptMode: JavascriptMode.unrestricted,
+                    onWebViewCreated: (_webViewController) =>
+                        webViewController = _webViewController,
+                    allowsInlineMediaPlayback: true,
+                    initialMediaPlaybackPolicy:
+                        AutoMediaPlaybackPolicy.always_allow,
+                  ),
+                  /*isOffline
+                              ? Expanded(
+                                  child: Center(
+                                    child: Container(
+                                      child: Text(
+                                        "Offline",
+                                        style: TextStyle(fontSize: 30.0),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container()*/
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
