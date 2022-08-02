@@ -65,10 +65,6 @@ class _HomePageState extends State<HomePage> {
               child: Stack(
                 children: [
                   WebView(
-                    onPageFinished: (state) {
-                      webViewController
-                          .runJavascript("window.backgroundMusic.play()");
-                    },
                     onProgress: (progress) {
                       setState(
                         () {
