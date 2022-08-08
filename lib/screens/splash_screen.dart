@@ -1,54 +1,48 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:jow_app/screens/home_page.dart';
+//import 'package:untitled37/views/herder_container.dart';
+//import 'package:flutterlogindesign/utils/color.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+//import 'package:untitled37/views/color.dart';
+//impor 'package:untitled37/views/login_page.dart';
 
+class SplashPage extends StatefulWidget {
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+
+  _SplashPageState createState() => _SplashPageState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    _navigatetohome();
-  }
+class _SplashPageState extends State<SplashPage> {
 
-  _navigatetohome() async {
-    await Future.delayed(Duration(seconds: 4), () {});
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HomePage(),
-      ),
-    );
+
+ @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Timer(const Duration(milliseconds: 6000), () {
+      Navigator.push(
+         context, MaterialPageRoute(builder: (context) => HomePage()));
+   });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              height: 180,
-              width: 180,
-              color: Colors.blue,
-            ),
-            Container(
-              child: Text('JOW RADIO',
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      backgroundColor: Color.fromARGB(255, 15, 60, 97),
-                      color: Colors.white)),
-            ),
-          ],
-        ),
-      ),
+      body: Container(
+                  color: Color.fromARGB(255, 19, 42, 61),
+                    child: Center(
+                      child: Text(
+                        'JAW Radio',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+
     );
   }
 }

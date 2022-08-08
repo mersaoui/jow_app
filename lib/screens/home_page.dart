@@ -54,9 +54,10 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(backgroundColor: Color.fromARGB(255, 19, 42, 61),
       body: SafeArea(
         child: WebView(
           onProgress: (progress) {
@@ -67,6 +68,8 @@ class _HomePageState extends State<HomePage> {
               },
             );
           },
+          //https://fastdeliveryjow.bubbleapps.io/version-test?debug_mode=true
+          //https://jow.plus/app-ios
           initialUrl: 'https://jow.plus/app-ios',
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (_webViewController) =>
