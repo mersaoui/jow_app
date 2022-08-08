@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         // statusBarIconBrightness: Brightness.light, //android icon batterie ....
         statusBarBrightness: Brightness.dark));
     return MaterialApp(
-      title: 'Flutter Demo for imy',
+      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
