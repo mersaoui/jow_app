@@ -4,6 +4,7 @@ import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:jow_app/splash_screen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
@@ -15,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool isLoading = false;
+  bool isLoading = true;
   double progressNumber = 0;
   late WebViewController webViewController;
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
@@ -59,24 +60,43 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 19, 42, 61),
       body: SafeArea(
-        child: WebView(
-          onProgress: (progress) {
-            setState(
-              () {
-                progressNumber = progress.toDouble();
-                print('progress: $progressNumber');
+        child: Stack(
+          children: [
+            WebView(
+              onPageFinished: (finished) {
+                setState(
+                  () {
+                    print('finished $finished');
+                    isLoading = false;
+                  },
+                );
               },
-            );
-          },
-          //https://fastdeliveryjow.bubbleapps.io/version-test?debug_mode=true
-          //https://jow.plus/app-ios
-          initialUrl: 'https://jow.plus/app-ios',
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (_webViewController) =>
-              webViewController = _webViewController,
-          allowsInlineMediaPlayback: true,
-          initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
-          backgroundColor: Color.fromARGB(255, 16, 29, 46),
+              onProgress: (progress) {
+                setState(
+                  () {
+                    progressNumber = progress.toDouble();
+                    print('progress: $progressNumber');
+                  },
+                );
+              },
+              //https://fastdeliveryjow.bubbleapps.io/version-test?debug_mode=true
+              //https://jow.plus/app-ios
+              initialUrl: 'https://jow.plus/app-ios',
+              javascriptMode: JavascriptMode.unrestricted,
+              onWebViewCreated: (_webViewController) =>
+                  webViewController = _webViewController,
+              allowsInlineMediaPlayback: true,
+              initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
+              backgroundColor: Color.fromARGB(255, 16, 29, 46),
+            ),
+            if (isLoading)
+              Center(
+                child: const Text(
+                  'I am loading data',
+                  style: TextStyle(color: Colors.white, fontSize: 40),
+                ),
+              ),
+          ],
         ),
       ),
     );
