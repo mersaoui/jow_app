@@ -54,10 +54,10 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Color.fromARGB(255, 19, 42, 61),
+    return Scaffold(
+      backgroundColor: Color.fromARGB(255, 19, 42, 61),
       body: SafeArea(
         child: WebView(
           onProgress: (progress) {
@@ -76,6 +76,7 @@ class _HomePageState extends State<HomePage> {
               webViewController = _webViewController,
           allowsInlineMediaPlayback: true,
           initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
+          backgroundColor: Color.fromARGB(255, 16, 29, 46),
         ),
       ),
     );
