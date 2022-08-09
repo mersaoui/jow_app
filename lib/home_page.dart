@@ -4,7 +4,7 @@ import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:jow_app/splash_screen.dart';
+//import 'package:jow_app/splash_screen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
@@ -90,13 +90,73 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: Color.fromARGB(255, 16, 29, 46),
             ),
             if (isLoading)
-              Center(
-                child: const Text(
-                  'I am loading data',
-                  style: TextStyle(color: Colors.white, fontSize: 40),
+           Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              //color: Color.fromRGBO(20, 172, 168, 1),
+              color: Color.fromARGB(255, 16, 29, 46),
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                flex: 2,
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 60.0,
+                          child: new Image.asset(
+                            'assets/jow.png',
+                            width: 70,
+                            height: 90,
+                          )),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                      ),
+                      Text(
+                        'Your Text here!!',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24.0),
+                      )
+                    ],
+                  ),
                 ),
               ),
-          ],
+              Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20.0),
+                    ),
+                    Text(
+                      'Your Text here!!',
+                      softWrap: true,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0,
+                          color: Colors.white),
+                    )
+                  ],
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+
+    ],
         ),
       ),
     );
