@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:jow_app/screens/home_page.dart';
+import 'package:jow_app/home_page.dart';
 //import 'package:untitled37/views/herder_container.dart';
 //import 'package:flutterlogindesign/utils/color.dart';
 

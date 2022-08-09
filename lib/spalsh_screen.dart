@@ -1,12 +1,24 @@
+
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:jow_app/home_page.dart';
 
-
-
-class img3 extends StatefulWidget {
+// i like desgin
+class SplashScreen extends StatefulWidget {
   @override
-  State<img3> createState() => _img3State();
+  _SplashScreenState createState() => _SplashScreenState();
 }
-class _img3State extends State<img3> {
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(
+        Duration(seconds: 5),
+            () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => HomePage())));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +28,7 @@ class _img3State extends State<img3> {
           Container(
             decoration: BoxDecoration(
               //color: Color.fromRGBO(20, 172, 168, 1),
-              color: Color.fromARGB(255, 16, 29, 46),
+                color: Color.fromARGB(255, 16, 29, 46),
             ),
           ),
           Column(
