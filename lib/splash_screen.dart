@@ -14,8 +14,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-        Duration(seconds: 5),
-            () => Navigator.pushReplacement(
+        Duration(seconds: 2),
+           () => Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomePage())));
   }
 
@@ -90,3 +90,4 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+
