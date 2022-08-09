@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jow_app/imag.dart';
-import 'package:jow_app/img1.dart';
-import 'package:jow_app/img3.dart';
-import 'package:jow_app/img4.dart';
-//import 'package:jow_app/lash.dart';
-import 'package:jow_app/screens/home_page.dart';
-//import 'package:jow_app/plash.dart';
-//import 'package:jow_app/screens/splash_screen.dart';
+import 'package:jow_app/spalsh_screen.dart';
+
+
 void main() {
   runApp(
     MyApp(),);
@@ -33,7 +28,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: SplashScreen(),
     );
   }
 }
