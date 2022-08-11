@@ -37,8 +37,8 @@ dependencies:
   webview_flutter: ^3.0.4
   internet_connection_checker: ^0.0.1+4
   cached_network_image: ^3.2.1
-  connectivity: ^3.0.6
   overlay_support: ^2.0.1
+  connectivity_plus: ^2.3.6+1
 
 dev_dependencies:
   flutter_test:
