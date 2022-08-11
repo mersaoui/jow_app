@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(floatingActionButton: FloatingActionButton(onPressed: (){webViewController.evaluateJavascript("window.backgroundMusic.pause()");}),
       backgroundColor: Color.fromARGB(255, 19, 42, 61),
       body: SafeArea(
         child: Stack(
