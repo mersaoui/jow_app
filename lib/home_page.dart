@@ -1,14 +1,15 @@
 import 'dart:async';
 //import 'dart:developer' as developer;
 //import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/services.dart';
-//import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'dart:io';
+//import 'dart:io';
 //import 'package:connectivity/connectivity.dart';
-//import 'package:overlay_support/overlay_support.dart';
-import 'package:flutter/foundation.dart';
+//import 'package:connectivity_plus/connectivity_plus.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,34 +23,32 @@ class _HomePageState extends State<HomePage> {
   double progressNumber = 0;
   late WebViewController webViewController;
 
-  //bool hasInternet = false;
-  bool _isConnected = true;
+  late StreamSubscription subscription;
+  bool isDeviceConnected = false;
+  bool isAlertSet = false;
 
-  Future<void> _checkInternetConnection() async {
-    try {
-      final response = await InternetAddress.lookup('www.kindacode.com');
-      if (response.isNotEmpty) {
-        setState(() {
-          _isConnected = true;
-          print('connected');
-        });
-      }
-    } on SocketException catch (err) {
-      setState(() {
-        _isConnected = false;
-        print('no internet');
-      });
-      if (kDebugMode) {
-        print(err);
-      }
-    }
-  }
   @override
   void initState() {
-    _checkInternetConnection();
+    getConnectivity();
     super.initState();
   }
 
+  getConnectivity() =>
+      subscription = Connectivity().onConnectivityChanged.listen(
+            (ConnectivityResult result) async {
+          isDeviceConnected = await InternetConnectionChecker().hasConnection;
+          if (!isDeviceConnected && isAlertSet == false) {
+            showDialogBox();
+            setState(() => isAlertSet = true);
+          }
+        },
+      );
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
 
 
 
@@ -172,4 +171,27 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
+
+  showDialogBox() => showCupertinoDialog<String>(
+    context: context,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: const Text('No Connection'),
+      content: const Text('Please check your internet connectivity'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () async {
+            Navigator.pop(context, 'Cancel');
+            setState(() => isAlertSet = false);
+            isDeviceConnected =
+            await InternetConnectionChecker().hasConnection;
+            if (!isDeviceConnected && isAlertSet == false) {
+              showDialogBox();
+              setState(() => isAlertSet = true);
+            }
+          },
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
   }

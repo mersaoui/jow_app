@@ -36,7 +36,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   webview_flutter: ^3.0.4
   internet_connection_checker: ^0.0.1+4
-  flutter_native_splash: ^2.2.7
   cached_network_image: ^3.2.1
   connectivity: ^3.0.6
   overlay_support: ^2.0.1

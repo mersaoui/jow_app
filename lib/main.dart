@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:jow_app/splash_screen.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-//import 'package:jow_app/plash.dart';
-//import 'package:jow_app/screens/splash_screen.dart';
+
+
 void main() {
 
 
@@ -12,7 +12,7 @@ void main() {
     MyApp(),
   );
 }
-
+//FlutterNativeSplash.remove();
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
