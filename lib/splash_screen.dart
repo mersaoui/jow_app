@@ -14,7 +14,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-        Duration(seconds: 2),
+        Duration(seconds: 1),
            () => Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomePage())));
   }
@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Container(
             decoration: BoxDecoration(
               //color: Color.fromRGBO(20, 172, 168, 1),
-                color: Color.fromARGB(255, 16, 29, 46),
+                color: Color.fromARGB(255, 19, 42, 61),
             ),
           ),
           Column(
@@ -67,7 +67,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    CircularProgressIndicator(),
+                    CircularProgressIndicator(
+                      valueColor:AlwaysStoppedAnimation<Color>(Colors.yellow),),
                     Padding(
                       padding: EdgeInsets.only(top: 20.0),
                     ),

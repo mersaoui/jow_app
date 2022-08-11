@@ -1,12 +1,14 @@
 import 'dart:async';
-import 'dart:developer' as developer;
-
+//import 'dart:developer' as developer;
+//import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
-//import 'package:jow_app/splash_screen.dart';
+//import 'package:flutter/services.dart';
+//import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'dart:io';
+//import 'package:connectivity/connectivity.dart';
+//import 'package:overlay_support/overlay_support.dart';
+import 'package:flutter/foundation.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,168 +21,155 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = true;
   double progressNumber = 0;
   late WebViewController webViewController;
-  ConnectivityResult _connectionStatus = ConnectivityResult.none;
-  final Connectivity _connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
-  bool isOffline = false;
 
-  @override
-  initState() {
-    super.initState();
-    initConnectivity();
-    _connectivitySubscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) async {
-      if (result == ConnectivityResult.none) {
-        if (result != ConnectivityResult.none) {
-          isOffline = await InternetConnectionChecker().hasConnection;
+  //bool hasInternet = false;
+  bool _isConnected = true;
 
-          if (isOffline) {
-            setState(() {
-              isOffline = true;
-            });
-          } else {
-            setState(() {
-              isOffline = false;
-            });
-          }
-        }
+  Future<void> _checkInternetConnection() async {
+    try {
+      final response = await InternetAddress.lookup('www.kindacode.com');
+      if (response.isNotEmpty) {
+        setState(() {
+          _isConnected = true;
+          print('connected');
+        });
       }
-    });
+    } on SocketException catch (err) {
+      setState(() {
+        _isConnected = false;
+        print('no internet');
+      });
+      if (kDebugMode) {
+        print(err);
+      }
+    }
+  }
+  @override
+  void initState() {
+    _checkInternetConnection();
+    super.initState();
   }
 
-  @override
-  dispose() {
-    _connectivitySubscription.cancel();
-    super.dispose();
-  }
+
+
+
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromARGB(255, 19, 42, 61),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            WebView(
-              onPageFinished: (finished) {
-                setState(
-                  () {
-                    print('finished $finished');
-                    isLoading = false;
-                  },
-                );
-              },
-              onProgress: (progress) {
-                setState(
-                  () {
-                    progressNumber = progress.toDouble();
-                    print('progress: $progressNumber');
-                  },
-                );
-              },
-              //https://fastdeliveryjow.bubbleapps.io/version-test?debug_mode=true
-              //https://jow.plus/app-ios
-              initialUrl: 'https://jow.plus/app-ios',
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (_webViewController) =>
-                  webViewController = _webViewController,
-              allowsInlineMediaPlayback: true,
-              initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
-              backgroundColor: Color.fromARGB(255, 16, 29, 46),
-            ),
-            if (isLoading)
-           Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              //color: Color.fromRGBO(20, 172, 168, 1),
-              color: Color.fromARGB(255, 16, 29, 46),
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                flex: 2,
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 60.0,
-                          child: new Image.asset(
-                            'assets/jow.png',
-                            width: 70,
-                            height: 90,
-                          )),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10.0),
-                      ),
-                      Text(
-                        'Your Text here!!',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24.0),
-                      )
-                    ],
-                  ),
-                ),
+    Widget build(BuildContext context) {
+      return Scaffold(
+        backgroundColor: Color.fromARGB(255, 19, 42, 61),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              WebView(
+                onPageFinished: (finished) {
+                  setState(
+                        () {
+                      print('finished $finished');
+                      isLoading = false;
+                    },
+                  );
+                },
+
+                onProgress: (progress) {
+                  setState(
+                        () {
+                      progressNumber = progress.toDouble();
+                      print('progress: $progressNumber');
+                      if (progress > 88) {
+                        isLoading = false;
+                      }
+                    },
+                  );
+                },
+
+
+
+                //https://fastdeliveryjow.bubbleapps.io/version-test?debug_mode=true
+                //https://jow.plus/app-ios
+                initialUrl: 'https://jow.plus/app-ios',
+                javascriptMode: JavascriptMode.unrestricted,
+                onWebViewCreated: (_webViewController) =>
+                webViewController = _webViewController,
+                allowsInlineMediaPlayback: true,
+                initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy
+                    .always_allow,
+                backgroundColor: Color.fromARGB(255, 19, 42, 61),
               ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              if (isLoading)
+                Stack(
+                  fit: StackFit.expand,
                   children: <Widget>[
-                    CircularProgressIndicator(),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
+                    Container(
+                      decoration: BoxDecoration(
+                        //color: Color.fromRGBO(20, 172, 168, 1),
+                        color: Color.fromARGB(255, 19, 42, 61),
+                      ),
                     ),
-                    Text(
-                      'Your Text here!!',
-                      softWrap: true,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0,
-                          color: Colors.white),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+
+                                CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: 60.0,
+                                  child: new Image.asset ('assets/jow.png',
+                                    width: 70,
+                                    height: 90,
+                                  ),),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 10.0),
+                                ),
+                                Text(
+                                  'Your Text here!!',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24.0),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.yellow),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 20.0),
+                              ),
+                              Text(
+                                'Your Text here!!',
+                                softWrap: true,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0,
+                                    color: Colors.white),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
                     )
                   ],
                 ),
-              )
+
             ],
-          )
-        ],
-      ),
 
-    ],
+          ),
         ),
-      ),
-    );
-  }
-
-  Future<void> initConnectivity() async {
-    late ConnectivityResult result;
-    try {
-      result = await _connectivity.checkConnectivity();
-    } on PlatformException catch (e) {
-      developer.log('Couldn\'t check connectivity status', error: e);
-      return;
+      );
     }
-
-    if (!mounted) {
-      return Future.value(null);
-    }
-
-    return _updateConnectionStatus(result);
   }
-
-  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-    setState(() {
-      _connectionStatus = result;
-    });
-  }
-}

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jow_app/splash_screen.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 //import 'package:jow_app/plash.dart';
 //import 'package:jow_app/screens/splash_screen.dart';
 void main() {
+
+
   runApp(
     MyApp(),
   );
@@ -22,12 +25,14 @@ class MyApp extends StatelessWidget {
         //systemNavigationBarColor: Color.fromARGB(255, 16, 29, 46) ////  android  navigator bar
         // statusBarIconBrightness: Brightness.light, //android icon batterie ....
         statusBarBrightness: Brightness.dark));
-    return MaterialApp(
+    return OverlaySupport.global(
+        child: MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      debugShowCheckedModeBanner: false,
       home: SplashScreen(),
-    );
+    ),);
   }
 }
