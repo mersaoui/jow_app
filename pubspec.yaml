@@ -40,7 +40,7 @@ dependencies:
   overlay_support: ^2.0.1
   loading_animation_widget: ^1.2.0+2
   connectivity_plus: ^2.3.6+1
-  loading_animation_widget: ^1.2.0+2
+
 
 
 dev_dependencies:

@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   late StreamSubscription subscription;
   bool isDeviceConnected = false;
   bool isAlertSet = false;
+  DateTime? lastPressed;
 
   @override
   void initState() {
@@ -55,20 +56,57 @@ class _HomePageState extends State<HomePage> {
 
   @override
     Widget build(BuildContext context) {
-      return Scaffold(
-        backgroundColor: Color.fromARGB(255, 19, 42, 61),
-        body: SafeArea(
-          child: Stack(
-            children: [
-              WebView(
-                onPageFinished: (finished) {
-                  setState(
-                        () {
-                      print('finished $finished');
-                      isLoading = false;
-                    },
-                  );
-                },
+      return WillPopScope(
+        onWillPop: () async {
+          final now = DateTime.now();
+          final maxDuration = Duration(seconds: 2);
+          final isWarning = lastPressed == null ||
+              now.difference(lastPressed!) > maxDuration;
+
+          if (isWarning) {
+            lastPressed = DateTime.now();
+            final snackBar = SnackBar(
+              content: Text('double Tap To Close App',
+                style: TextStyle(color: Colors.black),
+
+              ),
+              duration: maxDuration,
+              backgroundColor: Color.fromARGB(255, 242, 181, 0).withOpacity(
+                  0.5),
+              behavior: SnackBarBehavior.floating,
+              margin: EdgeInsets.all(30.0),
+
+            );
+            ScaffoldMessenger.of(context)
+              ..removeCurrentSnackBar()
+              ..showSnackBar(snackBar);
+            return false;
+
+
+
+          } else {
+            return true;
+          }
+        },
+
+
+
+
+        child: Scaffold(
+          backgroundColor: Color.fromARGB(255, 19, 42, 61),
+          body: SafeArea(
+            child: Stack(
+              children: [
+                WebView(
+                  onPageFinished: (finished) {
+                    setState(
+                          () {
+                        print('finished $finished');
+                        isLoading = false;
+                        //await _controller?.evaluateJavascript("document.getElementsByTagName('main')[0].style.display ='none'');
+                      },
+                    );
+                  },
 
                 onProgress: (progress) {
                   setState(
@@ -169,7 +207,7 @@ class _HomePageState extends State<HomePage> {
 
           ),
         ),
-      );
+      ),);
     }
 
   showDialogBox() => showCupertinoDialog<String>(
