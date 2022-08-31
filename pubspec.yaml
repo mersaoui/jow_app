@@ -38,8 +38,10 @@ dependencies:
   internet_connection_checker: ^0.0.1+4
   cached_network_image: ^3.2.1
   overlay_support: ^2.0.1
+  loading_animation_widget: ^1.2.0+2
   connectivity_plus: ^2.3.6+1
   loading_animation_widget: ^1.2.0+2
+
 
 dev_dependencies:
   flutter_test:

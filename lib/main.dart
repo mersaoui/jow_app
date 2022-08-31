@@ -11,6 +11,8 @@ void main() {
   runApp(
     MyApp(),
   );
+
+  //connectionStatus.dispose();
 }
 //FlutterNativeSplash.remove();
 class MyApp extends StatelessWidget {
@@ -21,10 +23,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // >>> use any dependency from your dependency manager <<<
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        //statusBarColor: Color.fromARGB(255, 16, 29, 46),  // android statubar
-        //systemNavigationBarColor: Color.fromARGB(255, 16, 29, 46) ////  android  navigator bar
+        statusBarColor: Color.fromARGB(255, 19, 42, 61),  // android statubar
+        systemNavigationBarColor: Color.fromARGB(255, 19, 42, 61) ////  android  navigator bar
         // statusBarIconBrightness: Brightness.light, //android icon batterie ....
-        statusBarBrightness: Brightness.dark));
+        //statusBarBrightness: Brightness.dark
+      )
+    );
     return OverlaySupport.global(
         child: MaterialApp(
       title: 'Flutter Demo',

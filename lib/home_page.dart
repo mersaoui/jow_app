@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/services.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 //import 'dart:io';
 //import 'package:connectivity/connectivity.dart';
@@ -41,7 +40,6 @@ class _HomePageState extends State<HomePage> {
           if (!isDeviceConnected && isAlertSet == false) {
             showDialogBox();
             setState(() => isAlertSet = true);
-            print('no internet');
           }
         },
       );
@@ -68,7 +66,6 @@ class _HomePageState extends State<HomePage> {
                         () {
                       print('finished $finished');
                       isLoading = false;
-                      //await _controller?.evaluateJavascript("document.getElementsByTagName('main')[0].style.display ='none'');
                     },
                   );
                 },
@@ -96,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                 allowsInlineMediaPlayback: true,
                 initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy
                     .always_allow,
-                backgroundColor: Color.fromARGB(255, 19, 41, 59),
+                backgroundColor: Color.fromARGB(255, 19, 42, 61),
               ),
               if (isLoading)
                 Stack(
@@ -129,11 +126,11 @@ class _HomePageState extends State<HomePage> {
                                   padding: EdgeInsets.only(top: 10.0),
                                 ),
                                 Text(
-                                  'JOW RADIO',
+                                  'Your Text here!!',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 24.0),
+                                      fontSize: 25.0),
                                 )
                               ],
                             ),
@@ -144,20 +141,20 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              LoadingAnimationWidget.staggeredDotsWave(
-                                color: Colors.yellow,
-                                size: 50,
+                              CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.yellow),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 20.0),
                               ),
                               Text(
-                                'Loding, Please Wait...',
+                                'Your Text here!!',
                                 softWrap: true,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 15.0,
+                                    fontSize: 18.0,
                                     color: Colors.white),
                               )
                             ],
@@ -187,7 +184,7 @@ class _HomePageState extends State<HomePage> {
             setState(() => isAlertSet = false);
             isDeviceConnected =
             await InternetConnectionChecker().hasConnection;
-            if (!isDeviceConnected && isAlertSet == false && (progressNumber < 5)) {
+            if (!isDeviceConnected && isAlertSet == false) {
               showDialogBox();
               setState(() => isAlertSet = true);
             }
