@@ -4,7 +4,6 @@ import 'package:jow_app/splash_screen.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 
-
 void main() {
 
 
@@ -23,10 +22,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // >>> use any dependency from your dependency manager <<<
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: Color.fromARGB(255, 19, 42, 61),  // android statubar
-        systemNavigationBarColor: Color.fromARGB(255, 19, 42, 61) ////  android  navigator bar
-        // statusBarIconBrightness: Brightness.light, //android icon batterie ....
-        //statusBarBrightness: Brightness.dark
+        //statusBarColor: Color.fromARGB(255, 19, 42, 61),  // android statubar
+        //systemNavigationBarColor: Color.fromARGB(255, 19, 42, 61) ////  android  navigator bar
+         statusBarIconBrightness: Brightness.light, //android icon batterie ....
+        statusBarBrightness: Brightness.dark
       )
     );
     return OverlaySupport.global(

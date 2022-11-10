@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 //import 'dart:developer' as developer;
 //import 'package:cached_network_image/cached_network_image.dart';
 //import 'package:connectivity/connectivity.dart';
@@ -6,107 +7,177 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/services.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-//import 'dart:io';
 //import 'package:connectivity/connectivity.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+//import 'package:flutter/foundation.dart';
+//import 'package:url_launcher/url_launcher.dart';
+//import 'package:url_launcher/link.dart';
+
+
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  Future<void>? _launched;
+  var counter = 0;
+  final Uri url = Uri.parse('https://google.com');
   bool isLoading = true;
   double progressNumber = 0;
   late WebViewController webViewController;
-
   late StreamSubscription subscription;
   bool isDeviceConnected = false;
   bool isAlertSet = false;
-  DateTime? lastPressed;
+  //DateTime? lastPressed;
 
-  @override
-  void initState() {
+
+ 
+
+ @override
+ void initState() {
     getConnectivity();
-    super.initState();
-  }
+   super.initState();}
 
   getConnectivity() =>
-      subscription = Connectivity().onConnectivityChanged.listen(
-            (ConnectivityResult result) async {
-          isDeviceConnected = await InternetConnectionChecker().hasConnection;
-          if (!isDeviceConnected && isAlertSet == false) {
-            showDialogBox();
-            setState(() => isAlertSet = true);
-          }
+     subscription = Connectivity().onConnectivityChanged.listen(
+          (ConnectivityResult result) async {
+  isDeviceConnected = await InternetConnectionChecker().hasConnection;
+    if(result == true) {
+      print('YAY! Free cute dog pics!');
+      } else {
+       print('No internet :( Reason:');
+
+   }
+
+      if (!isDeviceConnected && isAlertSet == false) {
+      showDialogBox();
+       setState(() => isAlertSet = true);
+       print('no internet');
+       }
         },
+  );
+
+ @override
+  void dispose() {
+   subscription.cancel();
+ super.dispose();
+ }
+
+  Future<bool> _onBack() async {
+
+    bool goBack = false;
+
+    var value = await webViewController.canGoBack();  // check webview can go back
+
+
+
+    if (value) {
+
+      webViewController.goBack(); // perform webview back operation
+
+      return false;
+
+    } else {
+
+      await showDialog(
+
+        context: context,
+
+        builder: (context) => new AlertDialog(
+
+          title: new Text('Confirmation ', style: TextStyle(color: Colors.purple)),
+
+          // Are you sure?
+
+
+
+          content: new Text('Do you want exit app ? '),
+
+          // Do you want to go back?
+
+          actions: <Widget>[
+
+            new TextButton(
+
+              onPressed: () {
+
+                Navigator.of(context).pop(false);
+
+                setState(() {
+
+                  goBack = false;
+
+                });
+
+              },
+
+              child: new Text('No'), // No
+
+            ),
+
+            new TextButton(
+
+              onPressed: () {
+
+                Navigator.of(context).pop();
+
+                setState(() {
+
+                  goBack = true;
+
+                });
+
+              },
+
+              child: new Text('Yes'),
+
+            ),
+
+          ],
+
+        ),
+
       );
 
-  @override
-  void dispose() {
-    subscription.cancel();
-    super.dispose();
+      if (goBack) Navigator.pop(context);   // If user press Yes pop the page
+
+      return goBack;
+
+    }
+
   }
 
 
-
-
   @override
-    Widget build(BuildContext context) {
-      return WillPopScope(
-        onWillPop: () async {
-          final now = DateTime.now();
-          final maxDuration = Duration(seconds: 2);
-          final isWarning = lastPressed == null ||
-              now.difference(lastPressed!) > maxDuration;
+  Widget build(BuildContext context) {
+    return  WillPopScope(
 
-          if (isWarning) {
-            lastPressed = DateTime.now();
-            final snackBar = SnackBar(
-              content: Text('double Tap To Close App',
-                style: TextStyle(color: Colors.black),
-
-              ),
-              duration: maxDuration,
-              backgroundColor: Color.fromARGB(255, 242, 181, 0).withOpacity(
-                  0.5),
-              behavior: SnackBarBehavior.floating,
-              margin: EdgeInsets.all(30.0),
-
-            );
-            ScaffoldMessenger.of(context)
-              ..removeCurrentSnackBar()
-              ..showSnackBar(snackBar);
-            return false;
+      onWillPop: _onBack,
 
 
-
-          } else {
-            return true;
-          }
-        },
-
-
-
-
-        child: Scaffold(
-          backgroundColor: Color.fromARGB(255, 19, 42, 61),
-          body: SafeArea(
-            child: Stack(
-              children: [
-                WebView(
-                  onPageFinished: (finished) {
-                    setState(
-                          () {
-                        print('finished $finished');
-                        isLoading = false;
-                        //await _controller?.evaluateJavascript("document.getElementsByTagName('main')[0].style.display ='none'');
-                      },
-                    );
-                  },
+  child: Scaffold(
+        backgroundColor: Color.fromARGB(255, 21, 48, 69),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              WebView(
+                onPageFinished: (finished) {
+                  setState(
+                        () {
+                      print('finished $finished');
+                      isLoading = false;
+                      //await _controller?.evaluateJavascript("document.getElementsByTagName('main')[0].style.display ='none'');
+                    },
+                  );
+                },
 
                 onProgress: (progress) {
                   setState(
@@ -120,19 +191,39 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
 
-
-
-                //https://fastdeliveryjow.bubbleapps.io/version-test?debug_mode=true
                 //https://jow.plus/app-ios
                 initialUrl: 'https://jow.plus/app-ios',
                 javascriptMode: JavascriptMode.unrestricted,
                 onWebViewCreated: (_webViewController) =>
-                webViewController = _webViewController,
+                 webViewController = _webViewController,
                 allowsInlineMediaPlayback: true,
                 initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy
-                    .always_allow,
-                backgroundColor: Color.fromARGB(255, 19, 42, 61),
+               .always_allow,
+               backgroundColor: Color.fromARGB(255,21, 48, 69),
+                 // samarche  ..........
+               navigationDelegate: (NavigationRequest request) {
+               print(request.url);
+              setState(() => counter++);
+
+                if (counter == 1) {
+             return NavigationDecision.navigate;
+             setState(
+                   () {
+                );
+               },
+             );
+
+               }
+                return NavigationDecision.prevent;
+               },
               ),
+
+
+
+
+
+///////add
+
               if (isLoading)
                 Stack(
                   fit: StackFit.expand,
@@ -140,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                     Container(
                       decoration: BoxDecoration(
                         //color: Color.fromRGBO(20, 172, 168, 1),
-                        color: Color.fromARGB(255, 19, 42, 61),
+                        color: Color.fromARGB(255,21, 48, 69),
                       ),
                     ),
                     Column(
@@ -164,11 +255,11 @@ class _HomePageState extends State<HomePage> {
                                   padding: EdgeInsets.only(top: 10.0),
                                 ),
                                 Text(
-                                  'Your Text here!!',
+                                  'JOW RADIO',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 25.0),
+                                      fontSize: 24.0),
                                 )
                               ],
                             ),
@@ -179,20 +270,20 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.yellow),
+                              LoadingAnimationWidget.staggeredDotsWave(
+                                color: Colors.yellow,
+                                size: 50,
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 20.0),
                               ),
                               Text(
-                                'Your Text here!!',
+                                'Loding, Please Wait...',
                                 softWrap: true,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18.0,
+                                    fontSize: 15.0,
                                     color: Colors.white),
                               )
                             ],
@@ -208,28 +299,54 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),);
-    }
+  }
 
-  showDialogBox() => showCupertinoDialog<String>(
+
+
+     showDialogBox() => showCupertinoDialog<String>(
     context: context,
-    builder: (BuildContext context) => CupertinoAlertDialog(
-      title: const Text('No Connection'),
-      content: const Text('Please check your internet connectivity'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () async {
-            Navigator.pop(context, 'Cancel');
-            setState(() => isAlertSet = false);
-            isDeviceConnected =
-            await InternetConnectionChecker().hasConnection;
-            if (!isDeviceConnected && isAlertSet == false) {
-              showDialogBox();
-              setState(() => isAlertSet = true);
-            }
-          },
-          child: const Text('OK'),
-        ),
+  builder: (BuildContext context) => CupertinoAlertDialog(
+    title: const Text('No Connection'),
+    content: const Text('Please check your internet connectivity'),
+    actions: <Widget>[
+       TextButton(
+        onPressed: () async {
+          Navigator.pop(context, 'Cancel');
+          setState(() => isAlertSet = false);
+          isDeviceConnected =
+         await InternetConnectionChecker().hasConnection;
+          if (!isDeviceConnected && isAlertSet == false ) {
+             showDialogBox();
+           setState(() => isAlertSet = true);
+          }
+         },
+         child: const Text('OK'),
+       ),
       ],
     ),
-  );
-  }
+   );
+   Future check() async {
+       try {
+         final result = await InternetAddress.lookup('google.com');
+         if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+           isDeviceConnected = true;
+           isLoading =false;
+           print('no internet adress');
+           setState(() {
+           });
+         }
+       } on SocketException catch (_) {
+         isLoading =true;
+         isDeviceConnected = false;
+         setState(() {
+         });
+         if(isDeviceConnected == false)
+           return showDialogBox();
+       }
+
+
+     }
+
+
+
+}
